@@ -23,7 +23,6 @@ public class Deck {
 	}
 
 	public Card drawCard() {
-		
 		return deckcards.remove(deckcards.size() -1);
 	}
 }
