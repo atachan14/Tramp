@@ -33,4 +33,17 @@ public class Execute {
 		}
 		return indexs;
 	}
+
+	public void sort(Card[] hands) {
+		for (int i = 0; i < hands.length - 1; i++) {
+			for (int j = i + 1; j < hands.length; j++) {
+				if (hands[i].num < hands[j].num) {
+					Card temp = hands[i];
+					hands[i] = hands[j];
+					hands[j] = temp;
+				}
+			}
+		}
+	}
+
 }

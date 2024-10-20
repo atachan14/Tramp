@@ -43,4 +43,31 @@ public class UI {
 		}
 		System.out.println();
 	}
+
+	public String getComboName(int comboScore) {
+		switch (comboScore) {
+		case 900:
+			return "ロイヤルストレートフラッシュ！";
+		case 800:
+			return "ストレートフラッシュ！";
+		case 700:
+			return "フォーカード！";
+		case 600:
+			return "フルハウス！";
+		case 550:
+			return "フラッシュ！";
+		case 500:
+			return "ストレート！";
+		case 450:
+			return "スリーカード！";
+		case 300:
+			return "ツーペア！";
+		case 150:
+			return "ワンペア！";
+		case 0:
+			return "ハイカード！";
+		default:
+			return "おかしなことが起こった！";
+		}
+	}
 }

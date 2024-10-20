@@ -7,12 +7,14 @@ public class PokerManager {
 	Board board;
 	Execute execute;
 	UI ui;
+	MathScore mathScore;
 
 	public PokerManager(Option option) {
 		this.option = option;
 		board = new Board(option);
 		execute = new Execute(option);
 		ui = new UI();
+		mathScore=new MathScore();
 	}
 
 	public void startGame() {
@@ -39,11 +41,18 @@ public class PokerManager {
 			}
 
 		}
-		scoreClearing();
+		for (Player player : board.allPlayers) {
+			execute.sort(player.hands);
+			mathScore.scoreClearing(player,player.hands);
+		}
+		mathScore.winnerJudge();
+		do {
+			mathScore.getComboWinner(board.allPlayers);
+		}while()
 //		winnerJudge();
 //		result();
 //		retrySelect();
-		
+
 //		board.debug();
 	}
 
