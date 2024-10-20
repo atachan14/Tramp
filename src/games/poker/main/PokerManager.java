@@ -40,9 +40,9 @@ public class PokerManager {
 
 		}
 		scoreClearing();
-		winnerJudge();
-		result();
-		retrySelect();
+//		winnerJudge();
+//		result();
+//		retrySelect();
 		
 //		board.debug();
 	}

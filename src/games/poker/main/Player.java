@@ -12,13 +12,15 @@ public class Player {
 	int input;
 	int comboScore;
 	int numScore;
+	
 
 	public Player(Option option, int index) {
 		this.option = option;
 		this.name = "player" + (index + 1);
 		this.hands = new Card[option.getMaxHands()];
 		this.reroll = option.getMaxReroll();
-
+		int[] numMatch = new int[hands.length];
+		int[] suitMatch = new int[hands.length];
 	}
 
 	public Card[] getHands() {
