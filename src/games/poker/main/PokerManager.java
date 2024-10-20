@@ -26,14 +26,16 @@ public class PokerManager {
 				}
 				ui.turnOpening(board.allPlayers[i]);
 				ui.handsDisplay(board.allPlayers[i]);
-				int input = board.allPlayers[i].rerollinput(board.allPlayers[i]);
-				if (input == 0) {
+				board.allPlayers[i].rerollinput(board.allPlayers[i]);
+				if (board.allPlayers[i].input == 0) {
 					board.allPlayers[i].hold = true;
+					System.out.println();
 					continue;
 				}
-				ArrayList<Integer> indexs = execute.getIndexFromDigit(input);
+				ArrayList<Integer> indexs = execute.getIndexFromDigit(board.allPlayers[i].input);
 				board.allPlayers[i].turnReroll(board, indexs);
 				ui.afterDisplay(board.allPlayers[i], indexs);
+				System.out.println();
 			}
 
 		}

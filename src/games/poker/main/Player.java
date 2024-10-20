@@ -9,19 +9,20 @@ public class Player {
 	Card[] hands;
 	Option option;
 	UI ui = new UI();
+	int input;
 
-	public Player(Option option,int index) {
+	public Player(Option option, int index) {
 		this.option = option;
-		this.name = "player"+(index+1);
+		this.name = "player" + (index + 1);
 		this.hands = new Card[option.getMaxHands()];
 		this.reroll = option.getMaxReroll();
-		
+
 	}
 
 	public Card[] getHands() {
 		return hands;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -30,30 +31,29 @@ public class Player {
 		hands[index] = deck.drawCard();
 	}
 
-	public void rerollCard(Board board,int index) {
+	public void rerollCard(Board board, int index) {
 		Card gift = hands[index];
-		drawCard(board.deck,index);
+		drawCard(board.deck, index);
 		board.grave.addGrave(gift);
 	}
-	
+
 	public void openingDraw(Deck deck) {
 		for (int i = 0; i < hands.length; i++) {
 			drawCard(deck, i);
 		}
 	}
-	
+
 	public void turnReroll(Board board, ArrayList<Integer> indexs) {
 		for (int index : indexs)
 			rerollCard(board, index);
 		reroll--;
+		if (reroll == 0)
+			hold = true;
 	}
-	
-	
-	public int rerollinput(Player player) {
-		System.out.print("　1~5.reroll(複数選択可) 0.hold ＞" );
-		int input = new java.util.Scanner(System.in).nextInt();
-		return input;
+
+	public void rerollinput(Player player) {
+		System.out.print("　1~5.reroll(複数選択可) 0.hold ＞");
+		input = new java.util.Scanner(System.in).nextInt();
 	}
-	
-	
+
 }

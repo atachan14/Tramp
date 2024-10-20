@@ -29,13 +29,11 @@ public class UI {
 
 	public void handsDisplay(Player player) {
 		for (Card all : player.hands)
-			System.out.print("【" + all + "】 ");
+			System.out.print("[" + all + "] ");
 	}
 
 	public void afterDisplay(Player player, ArrayList<Integer> indexs) {
-		if (player.hold == true)
-			return; // holdなら非表示
-
+		System.out.print("→");
 		for (int i = 0; i < player.hands.length; i++) {
 			if (indexs.contains(i)) {
 				System.out.print("【" + player.hands[i] + "】 ");
@@ -43,7 +41,6 @@ public class UI {
 				System.out.print("[" + player.hands[i] + "] ");
 			}
 		}
-		System.out.println();
 		System.out.println();
 	}
 }
