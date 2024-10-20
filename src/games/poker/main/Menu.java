@@ -9,7 +9,6 @@ public class Menu {
 		System.out.println("	poker");
 		System.err.println();
 		System.out.println();
-
 	}
 
 	public void mainMenu() {

@@ -7,16 +7,25 @@ public class Execute {
 		this.option = option;
 	}
 
-	public void OpeningDraw(Deck deck, Player[] player) {
+	public void OpeningDraw(Board board) {
 		System.out.println(option.getMaxHands());
 		System.out.println(option.getMaxPlayer());
-		for (int i = 0; i < option.getMaxHands(); i++) {
-			for (int j = 0; j < option.getMaxPlayer(); j++) {
-				Card temp = deck.drawCard();
-				player[j].hands[i] = temp;
-			}
+		for (int i = 0; i < option.getMaxPlayer(); i++) {
+				board.players[i].openingDraw(board.deck);
+		}
+		for (int i = 0; i < option.getMaxDealer(); i++) {
+			board.cpus[i].openingDraw(board.deck);
 		}
 	}
 	
+	public boolean allNotHold(Player[] players) {
+		for(Player player : players) {
+			if(!player.notHold) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
 	
 }
