@@ -1,5 +1,7 @@
 package games.poker.main;
 
+import java.util.ArrayList;
+
 public class Execute {
 	Option option;
 
@@ -8,24 +10,27 @@ public class Execute {
 	}
 
 	public void OpeningDraw(Board board) {
-		System.out.println(option.getMaxHands());
-		System.out.println(option.getMaxPlayer());
-		for (int i = 0; i < option.getMaxPlayer(); i++) {
-				board.players[i].openingDraw(board.deck);
-		}
-		for (int i = 0; i < option.getMaxDealer(); i++) {
-			board.cpus[i].openingDraw(board.deck);
+		for (int i = 0; i < board.allPlayers.length; i++) {
+			for (int j = 0; j < board.allPlayers[i].hands.length; j++)
+				board.allPlayers[i].drawCard(board.deck, j);
 		}
 	}
-	
-	public boolean allNotHold(Player[] players) {
-		for(Player player : players) {
-			if(!player.notHold) {
+
+	public boolean allHold(Player[] allPlayers) {
+		for (Player player : allPlayers) {
+			if (!player.hold) {
 				return false;
 			}
 		}
-		
 		return true;
 	}
-	
+
+	public ArrayList<Integer> getIndexFromDigit(int input) {
+		ArrayList<Integer> indexs = new ArrayList<Integer>();
+		while (input > 0) {
+			indexs.add(input % 10 - 1);
+			input /= 10;
+		}
+		return indexs;
+	}
 }

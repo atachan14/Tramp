@@ -2,7 +2,7 @@ package games.poker.main;
 
 public class Option {
 	int maxPlayer = 2;
-	int maxDealer = 2;
+	int maxCpu = 2;
 	int maxReroll =2;
 	int maxHands=5;
 
@@ -11,7 +11,7 @@ public class Option {
 	}
 	
 	public int getMaxDealer() {
-		return maxDealer;
+		return maxCpu;
 	}
 
 	public int getMaxReroll() {

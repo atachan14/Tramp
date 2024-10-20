@@ -1,31 +1,44 @@
 package games.poker.main;
 
+import java.util.ArrayList;
+
 public class PokerManager {
 	Option option;
 	Board board;
 	Execute execute;
+	UI ui;
 
 	public PokerManager(Option option) {
 		this.option = option;
-		this.execute = new Execute(option);
-
 		board = new Board(option);
+		execute = new Execute(option);
+		ui = new UI();
 	}
 
 	public void startGame() {
+		ui.start(board);
 		board.deck.shuffle();
 		execute.OpeningDraw(board);
-		While(execute.allNotHold(board.players)&&execute.allNotHold(board.cpus));{
-			for (int i = 0; i < board.player.length; i++) {
-				execute.reroll(board.player[i]);
+		while (execute.allHold(board.allPlayers) == false) {
+			for (int i = 0; i < board.allPlayers.length; i++) {
+				if (board.allPlayers[i].hold) {
+					continue;
+				}
+				ui.turnOpening(board.allPlayers[i]);
+				ui.handsDisplay(board.allPlayers[i]);
+				int input = board.allPlayers[i].rerollinput(board.allPlayers[i]);
+				if (input == 0) {
+					board.allPlayers[i].hold = true;
+					continue;
+				}
+				ArrayList<Integer> indexs = execute.getIndexFromDigit(input);
+				board.allPlayers[i].turnReroll(board, indexs);
+				ui.afterDisplay(board.allPlayers[i], indexs);
 			}
-			for (int i = 0; i < board.cpu.length; i++) {
-				execute.reroll(board.cpu[i]);
-			}
+
 		}
-		
-		
-		board.debug();
+
+//		board.debug();
 	}
 
 }

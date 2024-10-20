@@ -3,22 +3,35 @@ package games.poker.main;
 public class Board {
 	Option option;
 	Deck deck;
+	Grave grave;
 	Player[] players;
 	Cpu[] cpus;
+	Player[] allPlayers;
+	int totalPlayers;
 	Execute execute = new Execute(option);
 
 	public Board(Option option) {
 		this.option = option;
 		deck = new Deck();
+		grave = new Grave();
 		players = new Player[option.getMaxPlayer()];
 		for (int i = 0; i < players.length; i++) {
-			players[i] = new Player(option);
+			players[i] = new Player(option,i);
 		}
 		
 		cpus = new Cpu[option.getMaxDealer()];
 		for (int i = 0; i < cpus.length; i++) {
-			cpus[i] = new Cpu(option);
+			cpus[i] = new Cpu(option,i);
 		}
+		allPlayers =new Player[players.length+cpus.length];
+		for(int i = 0 ; i < players.length;i++) {
+			allPlayers[i]= players[i];
+		}
+		for(int i = 0 ; i < cpus.length;i++) {
+			allPlayers[players.length+i]= cpus[i];
+		}
+		
+		
 	}
 
 	public void debug() {
