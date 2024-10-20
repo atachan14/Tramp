@@ -39,7 +39,11 @@ public class PokerManager {
 			}
 
 		}
-
+		scoreClearing();
+		winnerJudge();
+		result();
+		retrySelect();
+		
 //		board.debug();
 	}
 

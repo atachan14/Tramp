@@ -10,6 +10,8 @@ public class Player {
 	Option option;
 	UI ui = new UI();
 	int input;
+	int comboScore;
+	int numScore;
 
 	public Player(Option option, int index) {
 		this.option = option;

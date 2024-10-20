@@ -4,7 +4,7 @@ public class Menu {
 
 	public void opening() {
 		System.out.println("---------------------");
-		System.out.println("	tramp");
+		System.out.println("	tramps");
 	}
 
 	public void mainMenu() {
