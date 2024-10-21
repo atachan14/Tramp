@@ -41,14 +41,14 @@ public class PokerManager {
 			}
 
 		}
-		for (Player player : board.allPlayers) {
-			execute.sort(player.hands);
-			mathScore.scoreClearing(player,player.hands);
-		}
-		mathScore.winnerJudge();
-		do {
-			mathScore.getComboWinner(board.allPlayers);
-		}while()
+//		for (Player player : board.allPlayers) {
+//			execute.sort(player.hands);
+//			mathScore.scoreClearing(player,player.hands);
+//		}
+//		mathScore.winnerJudge();
+//		do {
+//			mathScore.getComboWinner(board.allPlayers);
+//		}while()
 //		winnerJudge();
 //		result();
 //		retrySelect();

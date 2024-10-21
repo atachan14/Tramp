@@ -128,18 +128,18 @@ public class MathScore {
 		return matchCombo;
 	}
 
-	public Player getWinner(Player[] allPlayers) {
-		ArrayList<Player> winner = new ArrayList<Player>();
-		for(Player player : allPlayers) {
-			winner.add(player);
-		}
-		while(winner.size() != 1) {
-			winner = getComboWinner(winner);
-			winner = getNumWinner(winner);
-		}
-		
-			
-	}
+//	public Player getWinner(Player[] allPlayers) {
+//		ArrayList<Player> winner = new ArrayList<Player>();
+//		for(Player player : allPlayers) {
+//			winner.add(player);
+//		}
+//		while(winner.size() != 1) {
+//			winner = getComboWinner(winner);
+//			winner = getNumWinner(winner);
+//		}
+//		
+//			
+//	}
 
 	public ArrayList<Player> getComboWinner(ArrayList<Player> winners) {
 		ArrayList<Player> winner = new ArrayList<>();

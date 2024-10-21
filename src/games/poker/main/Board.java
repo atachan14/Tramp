@@ -8,7 +8,7 @@ public class Board {
 	Cpu[] cpus;
 	Player[] allPlayers;
 	int totalPlayers;
-	Execute execute = new Execute(option);
+	Execute execute = new Execute();
 
 	public Board(Option option) {
 		this.option = option;
