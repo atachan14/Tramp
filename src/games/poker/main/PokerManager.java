@@ -12,7 +12,7 @@ public class PokerManager {
 	public PokerManager(Option option) {
 		this.option = option;
 		board = new Board(option);
-		execute = new Execute(option);
+		execute = new Execute();
 		ui = new UI();
 		mathScore=new MathScore();
 	}

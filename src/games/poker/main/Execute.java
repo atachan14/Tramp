@@ -3,11 +3,7 @@ package games.poker.main;
 import java.util.ArrayList;
 
 public class Execute {
-	Option option;
 
-	public Execute(Option option) {
-		this.option = option;
-	}
 
 	public void OpeningDraw(Board board) {
 		for (int i = 0; i < board.allPlayers.length; i++) {

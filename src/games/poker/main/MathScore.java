@@ -1,5 +1,7 @@
 package games.poker.main;
 
+import java.util.ArrayList;
+
 public class MathScore {
 
 	public void scoreClearing(Player player, Card[] hands) {
@@ -15,6 +17,8 @@ public class MathScore {
 			player.comboScore = 600;
 		} else if (getMaxSuit(suitMatch) == 4) {
 			player.comboScore = 550;
+		} else if (getRoyalCount(player) == 5) {
+			player.comboScore = 510;
 		} else if (getStraightCount(player) == 4) {
 			player.comboScore = 500;
 		} else {
@@ -123,4 +127,48 @@ public class MathScore {
 		}
 		return matchCombo;
 	}
+
+	public Player getWinner(Player[] allPlayers) {
+		ArrayList<Player> winner = new ArrayList<Player>();
+		for(Player player : allPlayers) {
+			winner.add(player);
+		}
+		while(winner.size() != 1) {
+			winner = getComboWinner(winner);
+			winner = getNumWinner(winner);
+		}
+		
+			
+	}
+
+	public ArrayList<Player> getComboWinner(ArrayList<Player> winners) {
+		ArrayList<Player> winner = new ArrayList<>();
+		int maxScore = 0;
+		for (int i = 0; i < winners.size(); i++) {
+			if (maxScore < winners.get(i).comboScore) {
+				maxScore = winners.get(i).comboScore; // 最大スコア保存
+				winner.clear(); // 最大スコアが更新されたら旧同点1位はリセット
+				winner.add(winners.get(i)); // 最大スコア更新で、1位のプレイヤーも更新
+			} else if (maxScore == winners.get(i).comboScore) { // 最大スコアと同点だったら
+				winner.add(winners.get(i)); // 同点1位のプレイヤーとして保存
+			}
+		}
+		return winner;
+	}
+
+	public ArrayList<Player> getNumWinner(ArrayList<Player> winners) {
+		ArrayList<Player> winner = new ArrayList<>();
+		int maxScore = 0;
+		for (int i = 0; i < winners.size(); i++) {
+			if (maxScore < winners.get(i).numScore) {
+				maxScore = winners.get(i).numScore; // 最大スコア保存
+				winner.clear(); // 最大スコアが更新されたら旧同点1位はリセット
+				winner.add(winners.get(i)); // 最大スコア更新で、1位のプレイヤーも更新
+			} else if (maxScore == winners.get(i).numScore) { // 最大スコアと同点だったら
+				winner.add(winners.get(i)); // 同点1位のプレイヤーとして保存
+			}
+		}
+		return winner;
+	}
+
 }
