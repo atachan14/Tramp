@@ -41,5 +41,18 @@ public class Execute {
 			}
 		}
 	}
+	
+	public ArrayList<Integer> getMatchIndex(int[] matchs, int need) {
+		ArrayList<Integer> index = new ArrayList<Integer>();
+		for(int i = 0 ; i < matchs.length;i++) {
+			if(matchs[i] == need) {
+				index.add(i);
+			}
+		}
+		return index;
+		
+		
+		
+	}
 
 }

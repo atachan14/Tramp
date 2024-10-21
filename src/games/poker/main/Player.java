@@ -3,27 +3,29 @@ package games.poker.main;
 import java.util.ArrayList;
 
 public class Player {
+	Option option;
+
 	String name;
 	int reroll;
 	boolean hold = false;
-	ArrayList<Card> hands;
-	Option option;
-	UI ui = new UI();
 	int input;
+
 	int comboScore;
 	int numScore;
-	ArrayList<Card> usedHands;
+	ArrayList<Card> hands = new ArrayList<Card>();
+	ArrayList<Card> usedHands = new ArrayList<Card>();
+	int royalCount=0;
+	int flashCount=0;
+	int straightCount=0;
+	ArrayList<Integer> numMatch = new ArrayList<Integer>();
+	ArrayList<Integer> suitMatch = new ArrayList<Integer>();
+	
 	
 
 	public Player(Option option, int index) {
 		this.option = option;
 		this.name = "player" + (index + 1);
 		this.reroll = option.getMaxReroll();
-		this.hands = new ArrayList<Card>();
-		usedHands = new ArrayList<Card>();
-		ArrayList<Integer> numMatch = new ArrayList<Integer>();
-		ArrayList<Integer> suitMatch = new ArrayList<Integer>();
-		
 	}
 
 	public ArrayList<Card> getHands() {
@@ -41,6 +43,10 @@ public class Player {
 	public void rerollCard(Board board, int index) {
 		board.grave.addGrave(hands.get(index));
 		hands.set(index, board.deck.drawCard());
+	}
+	
+	public void giftUsed(int index) {
+		usedHands.add(hands.remove(index));
 	}
 
 	public void toUsedHands(int index) {

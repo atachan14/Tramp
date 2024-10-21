@@ -21,7 +21,7 @@ public class PokerManager {
 	public void runPoker() {
 		ui.start(board);
 		board.deck.shuffle();
-		execute.OpeningDraw(board, option);
+		execute.OpeningDraw(board,option);
 		while (execute.allHold(board.allPlayers) == false) {
 			for (int i = 0; i < board.allPlayers.length; i++) {
 				if (board.allPlayers[i].hold) {
@@ -53,10 +53,10 @@ public class PokerManager {
 		
 		ui.allOpenAndScore(board.allPlayers);
 
-		boolean winnersLoop = true;
-		for (Player player : board.allPlayers) {
-			winners.add(player);
-		}
+//		boolean winnersLoop = true;
+//		for (Player player : board.allPlayers) {
+//			winners.add(player);
+//		}
 		//		while (winnersLoop) {
 		//			winnersLoop = checkWinner(winners);
 		//		}
