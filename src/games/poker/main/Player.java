@@ -6,27 +6,27 @@ public class Player {
 	String name;
 	int reroll;
 	boolean hold = false;
-	Card[] hands;
+	ArrayList<Card> hands;
 	Option option;
 	UI ui = new UI();
 	int input;
 	int comboScore;
 	int numScore;
-	int[] usedIndexs;
+	ArrayList<Card> usedHands;
 	
 
 	public Player(Option option, int index) {
 		this.option = option;
 		this.name = "player" + (index + 1);
-		this.hands = new Card[option.getMaxHands()];
 		this.reroll = option.getMaxReroll();
-		int[] usedIndexs = new int[hands.length];
-		int[] numMatch = new int[hands.length];
-		int[] suitMatch = new int[hands.length];
+		this.hands = new ArrayList<Card>();
+		usedHands = new ArrayList<Card>();
+		ArrayList<Integer> numMatch = new ArrayList<Integer>();
+		ArrayList<Integer> suitMatch = new ArrayList<Integer>();
 		
 	}
 
-	public Card[] getHands() {
+	public ArrayList<Card> getHands() {
 		return hands;
 	}
 
@@ -35,17 +35,21 @@ public class Player {
 	}
 
 	public void drawCard(Deck deck, int index) {
-		hands[index] = deck.drawCard();
+		hands.add(deck.drawCard());
 	}
 
 	public void rerollCard(Board board, int index) {
-		Card gift = hands[index];
-		drawCard(board.deck, index);
-		board.grave.addGrave(gift);
+		board.grave.addGrave(hands.get(index));
+		hands.set(index, board.deck.drawCard());
+	}
+
+	public void toUsedHands(int index) {
+		usedHands.add(hands.remove(index));
+		
 	}
 
 	public void openingDraw(Deck deck) {
-		for (int i = 0; i < hands.length; i++) {
+		for (int i = 0; i < option.getMaxHands(); i++) {
 			drawCard(deck, i);
 		}
 	}

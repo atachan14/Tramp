@@ -17,7 +17,7 @@ public class Menu {
 		switch (input) {
 		case 1:
 			PokerManager pokerManager = new PokerManager(option);
-			pokerManager.startGame();
+			pokerManager.runPoker();
 		}
 	}
 }

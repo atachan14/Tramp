@@ -37,13 +37,13 @@ public class Board {
 	public void debug() {
 		for (int i = 0; i < option.getMaxPlayer(); i++) {
 			for (int j = 0; j < option.getMaxHands(); j++) {
-				System.out.print(players[i].hands[j]+" ");
+				System.out.print(players[i].hands.get(j)+" ");
 			}
 			System.out.println();
 		}
 		for (int i = 0; i < option.getMaxPlayer(); i++) {
 			for (int j = 0; j < option.getMaxHands(); j++) {
-				System.out.print(cpus[i].hands[j]+" ");
+				System.out.print(cpus[i].hands.get(j)+" ");
 			}
 			System.out.println();
 		}
