@@ -42,13 +42,11 @@ public class PokerManager {
 			}
 		}
 		ui.allTurnEnd();
-		
+		execute.allPlayersSort(board);
 		for (Player player : board.allPlayers) {
-			execute.sort(player.hands);
+			System.out.println("scorecleargo"); //debug
 			mathScore.scoreClearing(player, player.hands);
-			System.out.println("scorecleargo");
 		}
-
 		ui.allOpenAndScore(board.allPlayers);
 
 //		boolean winnersLoop = true;

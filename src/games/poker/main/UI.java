@@ -51,8 +51,10 @@ public class UI {
 
 	public void allOpenAndScore(Player[] allPlayers) {
 		for (Player player : allPlayers) {
-			System.out.println(player.name + "'s hands and combo score ");
-			handsDisplay(player);
+			System.out.println(player.name + "'s hands and combo");
+			System.out.print(" ");
+			for (Card all : player.usedHands)
+				System.out.print("［" + all + "］");
 			System.out.println(getComboName(player.comboScore));
 			System.out.println();
 		}

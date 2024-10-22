@@ -4,8 +4,7 @@ import java.util.ArrayList;
 
 public class Execute {
 
-
-	public void OpeningDraw(Board board,Option option) {
+	public void OpeningDraw(Board board, Option option) {
 		for (int i = 0; i < board.allPlayers.length; i++) {
 			for (int j = 0; j < option.getMaxHands(); j++)
 				board.allPlayers[i].drawCard(board.deck, j);
@@ -35,24 +34,22 @@ public class Execute {
 			for (int j = i + 1; j < hands.size(); j++) {
 				if (hands.get(i).num < hands.get(j).num) {
 					Card temp = hands.get(i);
-					hands.set(i,hands.get(j));
-					hands.set(j,temp);
+					hands.set(i, hands.get(j));
+					hands.set(j, temp);
 				}
 			}
 		}
 	}
-	
-	public ArrayList<Integer> getMatchIndex(int[] matchs, int need) {
-		ArrayList<Integer> index = new ArrayList<Integer>();
-		for(int i = 0 ; i < matchs.length;i++) {
-			if(matchs[i] == need) {
-				index.add(i);
-			}
-		}
-		return index;
-		
-		
-		
-	}
 
+	public void allPlayersUsedSort(Board board) {
+		for (Player player : board.allPlayers) {
+			sort(player.usedHands);
+		}
+	}
+	
+	public void allPlayersSort(Board board) {
+		for (Player player : board.allPlayers) {
+			sort(player.hands);
+		}
+	}
 }

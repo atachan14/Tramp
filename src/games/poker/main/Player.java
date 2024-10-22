@@ -49,10 +49,6 @@ public class Player {
 		usedHands.add(hands.remove(index));
 	}
 
-	public void toUsedHands(int index) {
-		usedHands.add(hands.remove(index));
-		
-	}
 
 	public void openingDraw(Deck deck) {
 		for (int i = 0; i < option.getMaxHands(); i++) {

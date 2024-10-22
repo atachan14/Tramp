@@ -8,76 +8,97 @@ public class MathScore {
 	public void scoreClearing(Player player, ArrayList<Card> hands) {
 		int[] suitMatch = getSuitMatch(player.hands);
 		int[] numMatch = getNumMatch(player.hands);
-		System.out.println("match go");
 
 		if (getRoyalFlashCount(player) == 5) {
 			player.comboScore = 900;
 			return;
 		}
-		if (getStraightCount(player) == 5) {
+		if (getStraightFlashCount(player) == 5) {
 			player.comboScore = 800;
-			System.out.println("sutohra go");
 			return;
 		}
 
-		if (getMatchCombo(numMatch) == 700) {
+		if (getMaxNum(numMatch) == 4) {
 			player.comboScore = 700;
-			int count = 0;
-			for (int index : execute.getMatchIndex(numMatch, 4)) {
-				player.giftUsed(index);
-				count++;
-				if (count == 4)
-					return;
-			}
+			manyGiftUsed(player, numMatch, 4, 4);
+			manyGiftUsed(player, getNumMatch(player.hands), 1, 1);
+			return;
 		}
 
-		if (getMatchCombo(numMatch) == 600) {
+		if (searchFullHouse(numMatch)) {
 			player.comboScore = 600;
-			int count = 0;
-			for (int index : execute.getMatchIndex(numMatch, 3)) {
-				player.giftUsed(index);
-				count++;
-				if (count == 3)
-					break;
-			}
-			for (int index : execute.getMatchIndex(numMatch, 3)) {
-				player.giftUsed(index);
-				count++;
-				if (count == 2)
-					break;
-			}
+			manyGiftUsed(player, numMatch, 3, 3);
+			manyGiftUsed(player, getNumMatch(player.hands), 2, 2);
 			return;
 		}
 
 		if (getMaxSuit(suitMatch) == 5) {
 			player.comboScore = 550;
-			int count = 0;
-			for (int index : execute.getMatchIndex(numMatch, 3)) {
-				player.giftUsed(index); // ※要修正：3カードが複数あったらバグりそう
-				count++;
-				if (count == 5)
-					break;
-			}
+			manyGiftUsed(player, suitMatch, 5, 5);
 			return;
 		}
 
 		if (getRoyalCount(player) == 5) {
 			player.comboScore = 510;
-		} else if (getStraightCount(player) == 5) {
+			return;
+		}
+		if (getStraightCount(player) == 5) {
 			player.comboScore = 500;
-		} else {
-			player.comboScore = getMatchCombo(numMatch);// 450,300,150
-			switch(player.comboScore) {
-			case 450:
-				int count = 0;
-				for (int index : execute.getMatchIndex(numMatch, 3)) {
-					player.giftUsed(index);
-					count++;
-					if (count == 3)
-						break;
-				}
-			case 300:
+			return;
+		}
+
+		player.comboScore = belowThreeAndUsed(numMatch, player);// 450,300,150
+
+	}
+
+	public int belowThreeAndUsed(int[] numMatch, Player player) {
+		int matchCombo = 0;
+		for (int i = 0; i < numMatch.length; i++) {
+			switch (numMatch[i]) {
+			case 3:
+				matchCombo += 151;
+				break;
+			case 2:
+				matchCombo += 75;
+				break;
+			case 1:
+				matchCombo += 0;
+				break;
 			}
+
+			if (matchCombo == 453) { //3*3+2*6とかなる前に切り上げ
+				break;
+			}
+			if (matchCombo == 300) { //2*6とかなる前に切り上げ
+				break;
+			}
+		}
+
+		switch (matchCombo) {
+		case 453:
+			manyGiftUsed(player, numMatch, 3, 3);
+			manyGiftUsed(player, getNumMatch(player.hands), 1, 2);
+			return 450;
+
+		case 300:
+			manyGiftUsed(player, numMatch, 2, 4);
+			execute.sort(player.usedHands);
+			manyGiftUsed(player, getNumMatch(player.hands), 1, 1);
+			return 300;
+
+		case 150:
+			manyGiftUsed(player, numMatch, 2, 2);
+			manyGiftUsed(player, getNumMatch(player.hands), 1, 3);
+			return 150;
+
+		case 0:
+			manyGiftUsed(player, numMatch, 1, 5);
+			System.out.println(player.usedHands);
+			return 0;
+
+		default:
+			return 0;
+
 		}
 	}
 
@@ -186,7 +207,49 @@ public class MathScore {
 		return max;
 	}
 
-	public int getStraightFlachCount(Player player) {
+	public int getMaxNum(int[] numMatch) {
+		int max = 0;
+		for (int i = 0; i < numMatch.length; i++) {
+			if (max < numMatch[i]) {
+				max = numMatch[i];
+			}
+		}
+		return max;
+	}
+
+	public ArrayList<Integer> getMatchIndex(int[] matchs, int need, int needCount) {
+		ArrayList<Integer> indexs = new ArrayList<Integer>();
+		int count = 0;
+		for (int i = 0; i < matchs.length; i++) {
+			if (matchs[i] == need) {
+				indexs.add(i);
+				count++;
+				if (count == needCount) {
+					return indexs;
+				}
+			}
+		}
+		return indexs;
+	}
+
+	public boolean searchFullHouse(int[] numMatch) {
+		boolean three = false;
+		boolean two = false;
+		for (int i = 0; i < numMatch.length; i++) {
+			if (numMatch[i] == 3) {
+				three = true;
+			}
+			if (numMatch[i] == 2) {
+				two = true;
+			}
+		}
+		if (three && two) {
+			return true;
+		}
+		return false;
+	}
+
+	public int getStraightFlashCount(Player player) {
 		int straightFlashCount = 0;
 		int max = 0;
 		ArrayList<Integer> usedIndex = new ArrayList<Integer>();
@@ -196,17 +259,18 @@ public class MathScore {
 			usedIndex.clear();
 			usedIndex.add(i);
 
-			for (int j = i + 1; j < player.hands.size() - i; j++) {
+			for (int j = i + 1; j < player.hands.size(); j++) {
 				if (player.hands.get(j - 1).num == player.hands.get(j).num + 1
 						&& player.hands.get(j - 1).suit == player.hands.get(j).suit) {
 					usedIndex.add(j);
 					straightFlashCount++;
 
 					if (straightFlashCount == 5) {
-						for (int index : usedIndex) {
-							player.giftUsed(index); // 成立したらユーズドに渡す
+						for (int k = usedIndex.size()-1; k >= 0;k--) {
+							player.giftUsed(usedIndex.get(k)); // 成立したらユーズドに渡す
 						}
 						player.numScore = i;
+						execute.sort(player.usedHands);
 						return straightFlashCount;
 					}
 					if (max < straightFlashCount) {
@@ -215,8 +279,6 @@ public class MathScore {
 
 				} else if (player.hands.get(j - 1).num > player.hands.get(j).num + 1) {
 					break;
-				} else {
-					continue;
 				}
 			}
 		}
@@ -227,22 +289,23 @@ public class MathScore {
 		int straightCount = 0;
 		int max = 0;
 		ArrayList<Integer> usedIndex = new ArrayList<Integer>();
-		
+
 		for (int i = 0; i < player.hands.size() - 4; i++) {
 			straightCount = 1;
 			usedIndex.clear();
 			usedIndex.add(i);
-			
-			for (int j = i + 1; j < player.hands.size() - i; j++) {
+
+			for (int j = i + 1; j < player.hands.size(); j++) {
 				if (player.hands.get(j - 1).num == player.hands.get(j).num + 1) {
 					usedIndex.add((j - 1));
 					straightCount++;
-					
+
 					if (straightCount == 5) {
-						for (int index : usedIndex) {
-							player.giftUsed(index); // 成立したらユーズドに渡す
+						for (int k=usedIndex.size()-1; k>=0;k--) {
+							player.giftUsed(usedIndex.get(k)); // 成立したらユーズドに渡す
 						}
 						player.numScore = i;
+						execute.sort(player.usedHands);
 						return straightCount;
 					}
 					if (max < straightCount) {
@@ -259,27 +322,12 @@ public class MathScore {
 		return max;
 	}
 
-	public static int getMatchCombo(int[] match) {
-		int matchCombo = 0;
-		for (int i = 0; i < match.length; i++) {
-			switch (match[i]) {
-			case 4:
-				matchCombo += 175;
-				break;
-			case 3:
-				matchCombo += 150;
-				break;
-			case 2:
-				matchCombo += 75;
-				break;
-			case 1:
-				matchCombo += 0;
-				break;
-			}
+	public void manyGiftUsed(Player player, int[] numMatch, int needMatch, int needCount) {
+		for (int i = getMatchIndex(numMatch, needMatch, needCount).size() - 1; i >= 0; i--) {
+			int index = getMatchIndex(numMatch, needMatch, needCount).get(i);
+			player.giftUsed(index);
 		}
-		return matchCombo;
 	}
-
 
 	public void mathComboWinner(ArrayList<Player> winners) {
 		int maxComboScore = 0;
