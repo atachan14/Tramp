@@ -8,7 +8,7 @@ public class PokerManager {
 	Execute execute;
 	UI ui;
 	MathScore mathScore;
-	ArrayList<Player> winners = new ArrayList<Player>();
+	MathWinners mathWinners;
 
 	public PokerManager(Option option) {
 		this.option = option;
@@ -16,12 +16,14 @@ public class PokerManager {
 		execute = new Execute();
 		ui = new UI();
 		mathScore = new MathScore();
+		mathWinners = new MathWinners(board);
+
 	}
 
 	public void runPoker() {
 		ui.start(board);
 		board.deck.shuffle();
-		execute.OpeningDraw(board,option);
+		execute.OpeningDraw(board, option);
 		while (execute.allHold(board.allPlayers) == false) {
 			for (int i = 0; i < board.allPlayers.length; i++) {
 				if (board.allPlayers[i].hold) {
@@ -43,56 +45,45 @@ public class PokerManager {
 		}
 		ui.allTurnEnd();
 		execute.allPlayersSort(board);
-		for (Player player : board.allPlayers) {
-			System.out.println("scorecleargo"); //debug
-			mathScore.scoreClearing(player, player.hands);
-		}
-		ui.allOpenAndScore(board.allPlayers);
-
-//		boolean winnersLoop = true;
-//		for (Player player : board.allPlayers) {
-//			winners.add(player);
-//		}
-		//		while (winnersLoop) {
-		//			winnersLoop = checkWinner(winners);
-		//		}
+		mathWinners.searchWinner(mathScore, ui);
+		ui.winnerDisplay(mathWinners.winners);
 
 	}
 
-	//	public boolean checkWinner(ArrayList<Player> winners) {
-	//		mathScore.mathComboWinner(winners);
-	//		if (winners.size() == 1) {
-	//			ui.winnerDisplay(winners);
-	//			return false;
-	//		}
-	//		mathScore.mathNumWinner(winners);
-	//		if (winners.size() == 1) {
-	//			ui.winnerDisplay(winners);
-	//			return false;
-	//		}
-	//		
-	//		execute.handsOutIndex(winners);
-	//		if (winners.get(0).hands.length == 0) {
-	//			ui.tiedDisplay(winners);
-	//			winners.clear();
-	//			return false;
-	//		}
+	// public boolean checkWinner(ArrayList<Player> winners) {
+	// mathScore.mathComboWinner(winners);
+	// if (winners.size() == 1) {
+	// ui.winnerDisplay(winners);
+	// return false;
+	// }
+	// mathScore.mathNumWinner(winners);
+	// if (winners.size() == 1) {
+	// ui.winnerDisplay(winners);
+	// return false;
+	// }
 	//
-	//		for (Player tiedWinners : winners) {
-	//			mathScore.scoreClearing(tiedWinners, tiedWinners.hands);
-	//		}
-	//		return true;
+	// execute.handsOutIndex(winners);
+	// if (winners.get(0).hands.length == 0) {
+	// ui.tiedDisplay(winners);
+	// winners.clear();
+	// return false;
+	// }
 	//
-	//	}
+	// for (Player tiedWinners : winners) {
+	// mathScore.scoreClearing(tiedWinners, tiedWinners.hands);
+	// }
+	// return true;
+	//
+	// }
 
-	//		mathScore.winnerJudge();
-	//		do {
-	//			mathScore.getComboWinner(board.allPlayers);
-	//		}while()
-	//		winnerJudge();
-	//		result();
-	//		retrySelect();
+	// mathScore.winnerJudge();
+	// do {
+	// mathScore.getComboWinner(board.allPlayers);
+	// }while()
+	// winnerJudge();
+	// result();
+	// retrySelect();
 
-	//		board.debug();
+	// board.debug();
 
 }

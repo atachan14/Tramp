@@ -14,18 +14,19 @@ public class Player {
 	int numScore;
 	ArrayList<Card> hands = new ArrayList<Card>();
 	ArrayList<Card> usedHands = new ArrayList<Card>();
-	int royalCount=0;
-	int flashCount=0;
-	int straightCount=0;
+	ArrayList<Card> tiedHands = new ArrayList<Card>();
+	int royalCount = 0;
+	int flashCount = 0;
+	int straightCount = 0;
 	ArrayList<Integer> numMatch = new ArrayList<Integer>();
 	ArrayList<Integer> suitMatch = new ArrayList<Integer>();
-	
-	
 
 	public Player(Option option, int index) {
 		this.option = option;
 		this.name = "player" + (index + 1);
 		this.reroll = option.getMaxReroll();
+		if (reroll == 0)
+			this.hold = true;
 	}
 
 	public ArrayList<Card> getHands() {
@@ -44,11 +45,16 @@ public class Player {
 		board.grave.addGrave(hands.get(index));
 		hands.set(index, board.deck.drawCard());
 	}
-	
+
 	public void giftUsed(int index) {
 		usedHands.add(hands.remove(index));
 	}
 
+	public void allUsedToTied() {
+		for(int i = 0 ; i< usedHands.size();i++) {
+			tiedHands.add(usedHands.remove(i));
+		}
+	}
 
 	public void openingDraw(Deck deck) {
 		for (int i = 0; i < option.getMaxHands(); i++) {
@@ -65,7 +71,7 @@ public class Player {
 	}
 
 	public void rerollinput(Player player) {
-		System.out.print("　1~5.reroll(複数選択可) 0.hold ＞");
+		System.out.print("　1~" + (option.getMaxHands() ) + ".reroll(複数選択可) 0.hold ＞");
 		input = new java.util.Scanner(System.in).nextInt();
 	}
 

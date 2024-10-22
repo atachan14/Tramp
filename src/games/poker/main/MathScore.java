@@ -35,6 +35,7 @@ public class MathScore {
 		if (getMaxSuit(suitMatch) == 5) {
 			player.comboScore = 550;
 			manyGiftUsed(player, suitMatch, 5, 5);
+			execute.sort(player.usedHands);
 			return;
 		}
 
@@ -46,9 +47,7 @@ public class MathScore {
 			player.comboScore = 500;
 			return;
 		}
-
 		player.comboScore = belowThreeAndUsed(numMatch, player);// 450,300,150
-
 	}
 
 	public int belowThreeAndUsed(int[] numMatch, Player player) {
@@ -66,10 +65,10 @@ public class MathScore {
 				break;
 			}
 
-			if (matchCombo == 453) { //3*3+2*6とかなる前に切り上げ
+			if (matchCombo == 453) { // 3*3+2*6とかなる前に切り上げ
 				break;
 			}
-			if (matchCombo == 300) { //2*6とかなる前に切り上げ
+			if (matchCombo == 300) { // 2*6とかなる前に切り上げ
 				break;
 			}
 		}
@@ -108,7 +107,7 @@ public class MathScore {
 		int needSuit;
 		ArrayList<Integer> usedIndex = new ArrayList<Integer>();
 
-		for (int k = 0; k < needNum.length; k++) {
+		for (int k = 0; k < player.hands.size(); k++) {
 			if (needNum[0] == player.hands.get(k).num) {
 				needSuit = player.hands.get(k).suit;
 				usedIndex.clear();
@@ -146,8 +145,8 @@ public class MathScore {
 					royalCount++;
 					usedIndex.add(j);
 					if (royalCount == needNum.length) {
-						for (int index : usedIndex) {
-							player.giftUsed(index); // 成立したらユーズドに渡す
+						for (int k = usedIndex.size() - 1; k >= 0; k--) {
+							player.giftUsed(usedIndex.get(k)); // 成立したらユーズドに渡す
 						}
 						return royalCount;
 					}
@@ -266,7 +265,7 @@ public class MathScore {
 					straightFlashCount++;
 
 					if (straightFlashCount == 5) {
-						for (int k = usedIndex.size()-1; k >= 0;k--) {
+						for (int k = usedIndex.size() - 1; k >= 0; k--) {
 							player.giftUsed(usedIndex.get(k)); // 成立したらユーズドに渡す
 						}
 						player.numScore = i;
@@ -297,11 +296,11 @@ public class MathScore {
 
 			for (int j = i + 1; j < player.hands.size(); j++) {
 				if (player.hands.get(j - 1).num == player.hands.get(j).num + 1) {
-					usedIndex.add((j - 1));
+					usedIndex.add((j));
 					straightCount++;
 
 					if (straightCount == 5) {
-						for (int k=usedIndex.size()-1; k>=0;k--) {
+						for (int k = usedIndex.size() - 1; k >= 0; k--) {
 							player.giftUsed(usedIndex.get(k)); // 成立したらユーズドに渡す
 						}
 						player.numScore = i;
@@ -314,8 +313,6 @@ public class MathScore {
 
 				} else if (player.hands.get(j - 1).num > player.hands.get(j).num + 1) {
 					break;
-				} else {
-					continue;
 				}
 			}
 		}
@@ -326,42 +323,6 @@ public class MathScore {
 		for (int i = getMatchIndex(numMatch, needMatch, needCount).size() - 1; i >= 0; i--) {
 			int index = getMatchIndex(numMatch, needMatch, needCount).get(i);
 			player.giftUsed(index);
-		}
-	}
-
-	public void mathComboWinner(ArrayList<Player> winners) {
-		int maxComboScore = 0;
-		ArrayList<Player> newWinners = new ArrayList<Player>();
-		for (int i = 0; i < winners.size(); i++) {
-			if (maxComboScore < winners.get(i).comboScore) {
-				maxComboScore = winners.get(i).comboScore; // 最大スコア保存
-				newWinners.clear(); // 最大スコアが更新されたら旧同点1位はリセット
-				newWinners.add(winners.get(i)); // 最大スコア更新で、1位のプレイヤーも更新
-			} else if (maxComboScore == winners.get(i).comboScore) { // 最大スコアと同点だったら
-				newWinners.add(winners.get(i)); // 同点1位のプレイヤーとして保存
-			}
-		}
-		winners.clear();
-		for (Player newWinner : newWinners) {
-			winners.add(newWinner);
-		}
-	}
-
-	public void mathNumWinner(ArrayList<Player> winners) {
-		int maxNumScore = 0;
-		ArrayList<Player> newWinners = new ArrayList<Player>();
-		for (int i = 0; i < winners.size(); i++) {
-			if (maxNumScore < winners.get(i).numScore) {
-				maxNumScore = winners.get(i).numScore; // 最大スコア保存
-				newWinners.clear(); // 最大スコアが更新されたら旧同点1位はリセット
-				newWinners.add(winners.get(i)); // 最大スコア更新で、1位のプレイヤーも更新
-			} else if (maxNumScore == winners.get(i).numScore) { // 最大スコアと同点だったら
-				newWinners.add(winners.get(i)); // 同点1位のプレイヤーとして保存
-			}
-		}
-		winners.clear();
-		for (Player newWinner : newWinners) {
-			winners.add(newWinner);
 		}
 	}
 }

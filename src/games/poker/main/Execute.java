@@ -46,7 +46,7 @@ public class Execute {
 			sort(player.usedHands);
 		}
 	}
-	
+
 	public void allPlayersSort(Board board) {
 		for (Player player : board.allPlayers) {
 			sort(player.hands);

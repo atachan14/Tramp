@@ -49,20 +49,26 @@ public class UI {
 		System.out.println("全員のターンが終了しました！手札をオープンします！");
 	}
 
-	public void allOpenAndScore(Player[] allPlayers) {
-		for (Player player : allPlayers) {
-			System.out.println(player.name + "'s hands and combo");
+	public void allWinnersOpen(ArrayList<Player> winners,int tiedCount) {
+		if(tiedCount >1) {
+			System.out.println("たいぶれーく！"+tiedCount+"回目！");
+		}else if(tiedCount == 1) {
+			System.out.println("たいぶれーく！");
+		}
+		
+		for (Player winner : winners) {
+			System.out.println(winner.name + "'s hands and combo");
 			System.out.print(" ");
-			for (Card all : player.usedHands)
+			for (Card all : winner.usedHands)
 				System.out.print("［" + all + "］");
-			System.out.println(getComboName(player.comboScore));
+			System.out.println(getComboName(winner.comboScore));
 			System.out.println();
 		}
 	}
-
+	
 	public void winnerDisplay(ArrayList<Player> winners) {
 		System.out.println(winners.get(0).name + " win!");
-		for (Card hand : winners.get(0).hands) {
+		for (Card hand : winners.get(0).usedHands) {
 			System.out.print("【" + hand + "】 ");
 		}
 	}
@@ -79,6 +85,8 @@ public class UI {
 			return "フルハウス！";
 		case 550:
 			return "フラッシュ！";
+		case 510:
+			return "ストレート！";
 		case 500:
 			return "ストレート！";
 		case 450:
