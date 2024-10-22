@@ -40,7 +40,6 @@ public class PokerManager {
 				ui.afterDisplay(board.allPlayers[i], indexs);
 				System.out.println();
 			}
-
 		}
 		ui.allTurnEnd();
 		
@@ -50,7 +49,6 @@ public class PokerManager {
 			System.out.println("scorecleargo");
 		}
 
-		
 		ui.allOpenAndScore(board.allPlayers);
 
 //		boolean winnersLoop = true;

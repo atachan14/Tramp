@@ -10,7 +10,7 @@ public class MathScore {
 		int[] numMatch = getNumMatch(player.hands);
 		System.out.println("match go");
 
-		if (getRoyalCount(player) == 5) {
+		if (getRoyalFlashCount(player) == 5) {
 			player.comboScore = 900;
 			return;
 		}
@@ -22,34 +22,66 @@ public class MathScore {
 
 		if (getMatchCombo(numMatch) == 700) {
 			player.comboScore = 700;
+			int count = 0;
 			for (int index : execute.getMatchIndex(numMatch, 4)) {
-				player.giftUsed(index); // 4カードが複数あったらバグるから後で修正
-				return;
+				player.giftUsed(index);
+				count++;
+				if (count == 4)
+					return;
 			}
-
 		}
+
 		if (getMatchCombo(numMatch) == 600) {
 			player.comboScore = 600;
+			int count = 0;
 			for (int index : execute.getMatchIndex(numMatch, 3)) {
 				player.giftUsed(index);
-				return;
+				count++;
+				if (count == 3)
+					break;
 			}
-
-			if (getMaxSuit(suitMatch) == 4) {
-				player.comboScore = 550;
+			for (int index : execute.getMatchIndex(numMatch, 3)) {
+				player.giftUsed(index);
+				count++;
+				if (count == 2)
+					break;
 			}
+			return;
+		}
 
-			if (getRoyalCount(player) == 5) {
-				player.comboScore = 510;
-			} else if (getStraightCount(player) == 4) {
-				player.comboScore = 500;
-			} else {
-				player.comboScore = getMatchCombo(numMatch);// 450,300,150
+		if (getMaxSuit(suitMatch) == 5) {
+			player.comboScore = 550;
+			int count = 0;
+			for (int index : execute.getMatchIndex(numMatch, 3)) {
+				player.giftUsed(index); // ※要修正：3カードが複数あったらバグりそう
+				count++;
+				if (count == 5)
+					break;
+			}
+			return;
+		}
+
+		if (getRoyalCount(player) == 5) {
+			player.comboScore = 510;
+		} else if (getStraightCount(player) == 5) {
+			player.comboScore = 500;
+		} else {
+			player.comboScore = getMatchCombo(numMatch);// 450,300,150
+			switch(player.comboScore) {
+			case 450:
+				int count = 0;
+				for (int index : execute.getMatchIndex(numMatch, 3)) {
+					player.giftUsed(index);
+					count++;
+					if (count == 3)
+						break;
+				}
+			case 300:
 			}
 		}
 	}
 
-	public int getRoyalCount(Player player) {
+	public int getRoyalFlashCount(Player player) {
 		int royalCount = 0;
 		int needNum[] = { 13, 12, 11, 10, 1 };
 		int needSuit;
@@ -74,6 +106,31 @@ public class MathScore {
 							break;
 						}
 					}
+				}
+			}
+		}
+		return royalCount;
+	}
+
+	public int getRoyalCount(Player player) {
+		int royalCount = 0;
+		int needNum[] = { 13, 12, 11, 10, 1 };
+		ArrayList<Integer> usedIndex = new ArrayList<Integer>();
+
+		for (int i = 0; i < needNum.length; i++) {
+			usedIndex.clear();
+			usedIndex.add(i);
+			for (int j = 0; j < player.hands.size(); j++) {
+				if (needNum[i] == player.hands.get(j).num) {
+					royalCount++;
+					usedIndex.add(j);
+					if (royalCount == needNum.length) {
+						for (int index : usedIndex) {
+							player.giftUsed(index); // 成立したらユーズドに渡す
+						}
+						return royalCount;
+					}
+					break;
 				}
 			}
 		}
@@ -169,19 +226,22 @@ public class MathScore {
 	public int getStraightCount(Player player) {
 		int straightCount = 0;
 		int max = 0;
+		ArrayList<Integer> usedIndex = new ArrayList<Integer>();
+		
 		for (int i = 0; i < player.hands.size() - 4; i++) {
-			straightCount = 0;
-			for (Card card : player.usedHands) {
-				player.hands.add(card);
-			}
-			player.usedHands.clear();
-
+			straightCount = 1;
+			usedIndex.clear();
+			usedIndex.add(i);
+			
 			for (int j = i + 1; j < player.hands.size() - i; j++) {
 				if (player.hands.get(j - 1).num == player.hands.get(j).num + 1) {
-					player.usedHands.add(player.hands.get(j - 1));
+					usedIndex.add((j - 1));
 					straightCount++;
-					if (straightCount == 4) {
-						player.usedHands.add(player.hands.get(j));
+					
+					if (straightCount == 5) {
+						for (int index : usedIndex) {
+							player.giftUsed(index); // 成立したらユーズドに渡す
+						}
 						player.numScore = i;
 						return straightCount;
 					}
@@ -220,18 +280,6 @@ public class MathScore {
 		return matchCombo;
 	}
 
-	// public Player getWinner(Player[] allPlayers) {
-	// ArrayList<Player> winner = new ArrayList<Player>();
-	// for(Player player : allPlayers) {
-	// winner.add(player);
-	// }
-	// while(winner.size() != 1) {
-	// winner = getComboWinner(winner);
-	// winner = getNumWinner(winner);
-	// }
-	//
-	//
-	// }
 
 	public void mathComboWinner(ArrayList<Player> winners) {
 		int maxComboScore = 0;
